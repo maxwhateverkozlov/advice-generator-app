@@ -1,14 +1,15 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import AdviceCard from './components/AdviceCard.vue';
+import { ref, onMounted } from "vue";
+import AdviceCard from "./components/AdviceCard.vue";
 
-const adviceId = ref(0);
-const adviceText = ref("Loading...");
+const adviceId = ref("...");
+const adviceText = ref("Roll the dice!");
 
 const fetchAdvice = async () => {
   try {
-    const response = await fetch("https://api.adviceslip.com/advice");
-
+    const response = await fetch(
+      "https://api.adviceslip.com/advice?t=${Date.now()}",
+    );
     const data = await response.json();
 
     adviceId.value = data.slip.id;
@@ -17,14 +18,13 @@ const fetchAdvice = async () => {
     console.error("Error loading the advice:", error);
     adviceText.value = "Failed to load advice. Try again!";
   }
-}
+};
 </script>
 
 <template>
-  <main class="bg-dark-blue min-h-screen flex justify-center items-center font-manrope">
-    <AdviceCard
-    :id="adviceId"
-    :text="adviceText"
-    @refresh="fetchAdvice"/>
+  <main
+    class="bg-dark-blue min-h-screen flex justify-center items-center font-manrope p-4"
+  >
+    <AdviceCard :id="adviceId" :text="adviceText" @refresh="fetchAdvice" />
   </main>
 </template>
